@@ -1,0 +1,7 @@
+Data/config.py
+venv/*
+Log/*
+__pycache__/
+*/__pycache__/
+*/*/__pycashe__/
+.idea
