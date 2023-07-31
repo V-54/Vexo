@@ -1,4 +1,8 @@
+from time import sleep
+
 from aiogram import types
+from create_bot import bot
+
 
 from Data.Text_messages import client_messages
 from Data_base.users_base import add_user
@@ -6,8 +10,18 @@ from Keyboards.Reply_keyboards.cliaent_keyboard import main_keyboard_set, settin
 from Keyboards.Inline_keyboards.about_keyboard import send_about_keyboard
 
 
-async def send_start_message(message: types.message):
+async def send_start_message(message: types.Message):
     await message.delete()
+    await message.answer("🖤")
+    mid = message.message_id
+    sleep(2)
+    await bot.delete_message(chat_id=message.chat.id, message_id=mid+1)
+    await message.answer("😈")
+    sleep(3)
+    await bot.delete_message(chat_id=message.chat.id, message_id=mid+2)
+    await message.answer("👹")
+    sleep(2)
+    await bot.delete_message(chat_id=message.chat.id, message_id=mid+3)
     add_user(message.from_user.username, message.from_user.full_name, message.chat.id, 'ru', 250)
     await message.answer(text=client_messages.TEXT_WARNING_FOR_USERS,
                          parse_mode='markdown')

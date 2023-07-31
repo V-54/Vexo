@@ -32,30 +32,30 @@ async def send_dice(message: types.message):
 # 22- chery; 1 - bar; 64- jackpot;
 async def send_slot(message: types.message):
     await message.delete()
-    if check_score(message) > 35:
+    if check_score(message) > 30:
         dice = await bot.send_dice(message.chat.id, emoji='🎰')
         if dice.dice.value == 1:
-            score = check_score(message) + 70
+            score = check_score(message) + 250
             update_score(message, score)
-            sleep(3)
+            sleep(2)
             await message.answer(f"you have <b>Bar</b>\n <b>Score - {check_score(message)}$</b>",
                                  parse_mode='HTML')
         elif dice.dice.value == 22:
-            score = check_score(message) + 60
+            score = check_score(message) + 150
             update_score(message, score)
-            sleep(3)
+            sleep(2)
             await message.answer(f"you have <b>Chery</b>\n <b>Score - {check_score(message)}$</b>",
                                  parse_mode='HTML')
         elif dice.dice.value == 64:
-            score = check_score(message) + dice.dice.value + 10
+            score = check_score(message) + 777
             update_score(message, score)
-            sleep(3)
+            sleep(2)
             await message.answer(f"You have <b>Jackpot!</b>\n Score - <b>{check_score(message)}$</b>",
                                  parse_mode='HTML')
         else:
-            score = check_score(message) - 35
+            score = check_score(message) - 30
             update_score(message, score)
-            sleep(3)
+            sleep(1.5)
             await message.answer(f"You lose\n Score - {check_score(message)}$")
     else:
         await message.answer(f"For play you need 35$\n You have - {check_score(message)}")
@@ -80,13 +80,13 @@ async def send_dart(message: types.message):
             sleep(3)
             await message.answer(f"You lose\n Score - {check_score(message)}$")
         elif 4 <= dice.dice.value < 6:
-            score = check_score(message) + dice.dice.value + 10
+            score = check_score(message) + dice.dice.value * 10
             update_score(message, score)
             sleep(3)
             await message.answer(f"You <b>win!</b>\n Score - <b>{check_score(message)}$</b>",
                                  parse_mode='HTML')
         else:
-            score = check_score(message) - + 70
+            score = check_score(message) + 100
             update_score(message, score)
             sleep(3)
             await message.answer(f"<b>Exactly!</b>\n Score - <b>{check_score(message)}$</b>",
@@ -106,23 +106,23 @@ async def send_bowling(message: types.message):
         if dice.dice.value == 1:
             score = check_score(message) - 40
             update_score(message, score)
-            sleep(3)
+            sleep(3.5)
             await message.answer(f"Absolutely by\n Score - {check_score(message)}$")
         elif 1 < dice.dice.value <= 3:
             score = check_score(message) - 35
             update_score(message, score)
-            sleep(3)
+            sleep(3.5)
             await message.answer(f"You lose\n Score - {check_score(message)}$")
         elif 4 <= dice.dice.value < 6:
-            score = check_score(message) + dice.dice.value + 10
+            score = check_score(message) + dice.dice.value * 10
             update_score(message, score)
-            sleep(3)
+            sleep(3.5)
             await message.answer(f"You <b>win!</b>\n Score - <b>{check_score(message)}$</b>",
                                  parse_mode='HTML')
         else:
-            score = check_score(message) - + 70
+            score = check_score(message) + 100
             update_score(message, score)
-            sleep(3)
+            sleep(3.5)
             await message.answer(f"<b>Strike!</b>\n Score - <b>{check_score(message)}$</b>",
                                  parse_mode='HTML')
     else:

@@ -45,11 +45,11 @@ async def play_game(message: types.Message):
         dealer_hand = [deck.pop(), deck.pop()]
 
         await message.answer(f"""
-        You hand: <b>{", ".join(player_hand)}</b>
         Dealer hand: <b>{dealer_hand[0]}</b>
+You hand: <b>{"  ".join(player_hand)} </b>
        
-    You score - <b>{check_score(message)}$</b>
-    You bet  - <b>{check_bet(message)}$</b>
+You score - <b>{check_score(message)}$</b>
+You bet  - <b>{check_bet(message)}$</b>
 
         Take a card?
         """,
@@ -114,15 +114,22 @@ async def callback(call: types.CallbackQuery):
         if sum_cards(player_hand) == 21:
             user_score += bet*3
             update_score(call.message, user_score)
+            await call.message.delete()
             await bot.send_message(chat_id=call.message.chat.id,
-                                   text=f"<b>@{username}</b> have <b>BlackJack!</b>",
+                                   text=f"<b>@{username}</b> have <b>BlackJack!</b>\n"
+                                        f"You score - {check_score(call.message)}\n"
+                                        f"You bet - {check_bet(call.message)}",
                                    parse_mode='HTML'
                                    )
         elif sum_cards(dealer_hand) == 21:
             user_score -= bet * 3
             update_score(call.message, user_score)
+            await call.message.delete()
             await bot.send_message(chat_id=call.message.chat.id,
-                                   text=BlackJack_LOSE
+                                   text=f"<b>Dealer</b> have <b>BlackJack!</b>\n"
+                                        f"You score - {check_score(call.message)}\n"
+                                        f"You bet - {check_bet(call.message)}",
+                                   parse_mode='HTML'
                                    )
         else:
             await check_winer(call.message)
@@ -133,9 +140,12 @@ async def check_winer(message: types.Message):
 
     global user_score
     global bet
-
-    while sum_cards(dealer_hand) < 17:
-        dealer_hand.append(deck.pop())
+    if sum_cards(dealer_hand) == 21:
+        user_score -= bet * 3
+        await bot.send_message(chat_id=message.chat.id, text=BlackJack_LOSE)
+    else:
+        while sum_cards(dealer_hand) < 17:
+            dealer_hand.append(deck.pop())
     await message.delete()
     player_score = sum_cards(player_hand)
     dealer_score = sum_cards(dealer_hand)
@@ -145,6 +155,7 @@ async def check_winer(message: types.Message):
     elif dealer_score > 21:
         user_score += bet
         await message.answer('You <b>win!</b>', parse_mode='HTML')
+
     elif player_score > dealer_score:
         user_score += bet
         await message.answer('<b>You win!</b>', parse_mode='HTML')
@@ -155,8 +166,8 @@ async def check_winer(message: types.Message):
         await message.answer('Draw.')
     update_score(message, user_score)
     await message.answer(f"""
-You hand: <b>{", ".join(player_hand)}</b>
-Dealer cards: <b>{", ".join(dealer_hand)}'</b>
+Dealer cards: <b>{"  ".join(dealer_hand)} = {dealer_score}</b>
+You hand: <b>{"  ".join(player_hand)} = {player_score}</b>
 
 You score - <b>{check_score(message)}</b>
 You bet - <b>{check_bet(message)}</b>
@@ -179,8 +190,11 @@ def sum_cards(hand: list) -> int:
 
 
 async def check_user_score(message: types.Message):
+    global user_score
+    user_score = check_score(message)
     await message.delete()
     await message.answer(f"You have {check_score(message)}$")
+    return user_score
 
 
 async def check_user_bet(message: types.Message):
