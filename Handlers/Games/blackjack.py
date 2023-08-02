@@ -22,8 +22,8 @@ username = "none"
 bet = 0
 user_score = 0
 
-async def play_game(message: types.Message):
 
+async def play_game(message: types.Message):
     global username
     global user_score
     global bet
@@ -62,7 +62,7 @@ You bet  - <b>{check_bet(message)}$</b>
         await message.answer("You no have money for play!\n Please wait")
         sleep(15)
         user_score = 100
-        update_score(message, user_score)
+        await update_score(message, user_score)
         await message.answer("Take it for play +100$")
     elif bet > user_score > 0 or 0 >= bet:
         await message.delete()
@@ -75,7 +75,7 @@ async def callback(call: types.CallbackQuery):
     if call.data == '+50':
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         bet += 50
-        update_bet(call.message, bet)
+        await update_bet(call.message, bet)
         await bot.send_message(chat_id=call.message.chat.id,
                                text=f"You bat = {check_bet(call.message)}",
                                reply_markup=bet_keyboard_set()
@@ -83,7 +83,7 @@ async def callback(call: types.CallbackQuery):
     elif call.data == '+100':
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         bet += 100
-        update_bet(call.message, bet)
+        await update_bet(call.message, bet)
         await bot.send_message(chat_id=call.message.chat.id,
                                text=f"You bat = {check_bet(call.message)}",
                                reply_markup=bet_keyboard_set()
@@ -91,7 +91,7 @@ async def callback(call: types.CallbackQuery):
     elif call.data == '-50':
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         bet -= 50
-        update_bet(call.message, bet)
+        await update_bet(call.message, bet)
         await bot.send_message(chat_id=call.message.chat.id,
                                text=f"You bat = {check_bet(call.message)}",
                                reply_markup=bet_keyboard_set()
@@ -99,7 +99,7 @@ async def callback(call: types.CallbackQuery):
     elif call.data == '-100':
         await bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
         bet -= 100
-        update_bet(call.message, bet)
+        await update_bet(call.message, bet)
         await bot.send_message(chat_id=call.message.chat.id,
                                text=f"You bat = {check_bet(call.message)}",
                                reply_markup=bet_keyboard_set()
@@ -112,8 +112,8 @@ async def callback(call: types.CallbackQuery):
     elif call.data == 'no':
         global user_score
         if sum_cards(player_hand) == 21:
-            user_score += bet*3
-            update_score(call.message, user_score)
+            user_score += bet * 3
+            await update_score(call.message, user_score)
             await call.message.delete()
             await bot.send_message(chat_id=call.message.chat.id,
                                    text=f"<b>@{username}</b> have <b>BlackJack!</b>\n"
@@ -123,7 +123,7 @@ async def callback(call: types.CallbackQuery):
                                    )
         elif sum_cards(dealer_hand) == 21:
             user_score -= bet * 3
-            update_score(call.message, user_score)
+            await update_score(call.message, user_score)
             await call.message.delete()
             await bot.send_message(chat_id=call.message.chat.id,
                                    text=f"<b>Dealer</b> have <b>BlackJack!</b>\n"
@@ -137,7 +137,6 @@ async def callback(call: types.CallbackQuery):
 
 
 async def check_winer(message: types.Message):
-
     global user_score
     global bet
     if sum_cards(dealer_hand) == 21:
@@ -164,7 +163,7 @@ async def check_winer(message: types.Message):
         await message.answer('You lose.')
     else:
         await message.answer('Draw.')
-    update_score(message, user_score)
+    await update_score(message, user_score)
     await message.answer(f"""
 Dealer cards: <b>{"  ".join(dealer_hand)} = {dealer_score}</b>
 You hand: <b>{"  ".join(player_hand)} = {player_score}</b>
@@ -172,6 +171,7 @@ You hand: <b>{"  ".join(player_hand)} = {player_score}</b>
 You score - <b>{check_score(message)}</b>
 You bet - <b>{check_bet(message)}</b>
 """, parse_mode='HTML')
+
 
 def sum_cards(hand: list) -> int:
     score: int = 0
