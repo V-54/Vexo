@@ -1,4 +1,5 @@
 Data/config.py
+*/config.py
 venv/*
 Log/*
 __pycache__/
