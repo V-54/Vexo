@@ -1,7 +1,7 @@
-TOKEN = '6312932556:AAF_NAK52Jhg4o72F1k-Rji4CDklG-ncjPw'
+TOKEN = 'you token from @BotFather'
 
-MySQL_db_name = 'HALmemory'
+MySQL_db_name = 'VEXOmemory'
 MySQL_db_user = 'root'
-MySQL_db_password = 'h0lDmBrRw%'
+MySQL_db_password = 'you password for DB'
 
-admin_chat_id = 1378376219
+admin_chat_id = 123456789
