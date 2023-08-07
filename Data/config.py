@@ -1,8 +1,7 @@
-# Update this file with your data
-TOKEN = 'You token from https://t.me/BotFather'
+TOKEN = '6312932556:AAF_NAK52Jhg4o72F1k-Rji4CDklG-ncjPw'
 
-MySQL_db_name = 'VEXOmemory'
+MySQL_db_name = 'HALmemory'
 MySQL_db_user = 'root'
-MySQL_db_password = 'You DB password'
+MySQL_db_password = 'h0lDmBrRw%'
 
-admin_chat_id = 1234567890
+admin_chat_id = 1378376219

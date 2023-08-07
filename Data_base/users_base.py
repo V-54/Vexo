@@ -1,4 +1,4 @@
-import aiomesql
+import aiomysql
 from loguru import logger
 
 from Data import config
@@ -17,7 +17,7 @@ try:
 
 
     async def check_score(message):
-        async with connect_to_database() as connection:
+        async with await connect_to_database() as connection:
             async with connection.cursor() as cursor:
                 await cursor.execute(f"SELECT score FROM users WHERE telegram_id = {message.chat.id}")
                 result = await cursor.fetchone()
@@ -25,14 +25,14 @@ try:
 
 
     async def update_score(message, score):
-        async with connect_to_database() as connection:
+        async with await connect_to_database() as connection:
             async with connection.cursor() as cursor:
                 await cursor.execute(f"UPDATE users SET score = '{score}' WHERE telegram_id = {message.chat.id}")
                 await connection.commit()
 
 
     async def check_bet(message):
-        async with connect_to_database() as connection:
+        async with await connect_to_database() as connection:
             async with connection.cursor() as cursor:
                 await cursor.execute(f"SELECT bet FROM users WHERE telegram_id = {message.chat.id}")
                 result = await cursor.fetchone()
@@ -40,14 +40,14 @@ try:
 
 
     async def update_bet(message, bet):
-        async with connect_to_database() as connection:
+        async with await connect_to_database() as connection:
             async with connection.cursor() as cursor:
                 await cursor.execute(f"UPDATE users SET bet = '{bet}' WHERE telegram_id = {message.chat.id}")
                 await connection.commit()
 
 
     async def add_user(full_name, name, telegram_id, language, score):
-        async with connect_to_database() as connection:
+        async with await connect_to_database() as connection:
             async with connection.cursor() as cursor:
                 await cursor.execute("SELECT COUNT(*) FROM users WHERE telegram_id = %s", (telegram_id))
                 result = await cursor.fetchone()
@@ -63,5 +63,5 @@ try:
             await connection.commit()
 
 
-except Exception as error:
-    logger.error(error)
+except Exception as error_db:
+    logger.error(error_db)
